@@ -15,27 +15,39 @@ namespace WeekThreeAssignmentTextFileAndLinkList
         {
             //Lists out the monsters that is being read from the file
             List<Monster> monsters = new List<Monster>();
-            using (StreamReader reader = new StreamReader(Stats))
+            try
             {
-                //This reads the file with the stats of the monster and adds it to the list
-                reader.ReadLine();
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                using (StreamReader reader = new StreamReader(Stats))
                 {
-                    string[] data = line.Split(' ');
-                    string type = data[0];
-                    int hp = int.Parse(data[1]);
-                    int mp = int.Parse(data[2]);
-                    int ap = int.Parse(data[3]);
-                    int def = int.Parse(data[4]);
-                    monsters.Add(new Monster(type, hp, mp, ap, def));
+                    //This reads the file with the stats of the monster and adds it to the list
+                    reader.ReadLine();
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        //I did get help from https://www.dotnetperls.com/parse about the Parse to add the numbers of the stats of the monster to the data in order for the monster with their stats to be added to the list.
+                        string[] data = line.Split(' ');
+                        string type = data[0];
+                        int hp = int.Parse(data[1]);
+                        int mp = int.Parse(data[2]);
+                        int ap = int.Parse(data[3]);
+                        int def = int.Parse(data[4]);
+                        monsters.Add(new Monster(type, hp, mp, ap, def));
+                    }
                 }
+            } 
+            catch (Exception ex)
+            {
+                //This reads out the message that the file could not have been found
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(ex.Message);
             }
             return monsters;
         }
 
         static void Main(string[] args)
         {
+            //This is the directory path to the Stats.txt file, I got help from https://learn.microsoft.com/en-us/dotnet/api/system.io.directory.getcurrentdirectory?view=net-7.0 for this part 
+            var path = Directory.GetCurrentDirectory() + @"\Stats.txt";
             //This is list of the monster that
             List<Monster> monsters = LoadMonsters("Stats.txt");
             List<Monster> restofMonsters = monsters.ToList();
