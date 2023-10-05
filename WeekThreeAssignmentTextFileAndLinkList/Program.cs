@@ -27,6 +27,47 @@ namespace WeekThreeAssignmentTextFileAndLinkList
                 restofMonsters.Add(monster);
             }
 
+            //The Double Linked List that Loads the monsters from the text file
+            static DoubleLinkedList<Monster> LoadMonsters(string path)
+            {
+                DoubleLinkedList<Monster> monsters = new DoubleLinkedList<Monster>();
+
+                try
+                {
+                    //This reads the all the text within the Stats.txt file
+                    string[] lines = File.ReadAllLines(path);
+
+                    foreach (string line in lines)
+                    {
+                        //I learned this from https://learn.microsoft.com/en-us/dotnet/api/system.string.split?view=net-7.0 which is about spliting the lists based off the part of the text file
+                        string[] parts = line.Split(',');
+
+                        if (parts.Length == 5)
+                        {
+                            //Adds the monster and their stats, I learned about the parse from https://www.tutorialspoint.com/chash-int-tryparse-method
+                            string type = parts[0];
+                            if (int.TryParse(parts[1], out int hp) && int.TryParse(parts[2], out int mp) && int.TryParse(parts[3], out int ap) && int.TryParse(parts[4], out int def))
+                            {
+                                monsters.Add(new Monster(type, hp, mp, ap, def));
+                            }
+                        }
+                        else
+                        {
+                            //This is just in case it doesn't read the monster's stats
+                            Console.WriteLine($"Invalid line: {line}");
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //This reads out the message that the file could not have been found
+                    Console.WriteLine("The file could not be read:");
+                    Console.WriteLine($"Error reading file: {ex.Message}");
+                }
+
+                return monsters;
+            }
             //These are the stats of the player
             int playerHP = 100;
             int playerAP = 30;
@@ -91,47 +132,6 @@ namespace WeekThreeAssignmentTextFileAndLinkList
                 writer.WriteLine("Game Results:");
                 writer.WriteLine("Player HP: " + playerHP);
                 writer.WriteLine("Monsters defeated: " + (monsters.Count - restofMonsters.Count));
-            }
-            //The Double Linked List that Loads the monsters from the text file
-            static DoubleLinkedList<Monster> LoadMonsters(string path)
-            {
-                DoubleLinkedList<Monster> monsters = new DoubleLinkedList<Monster>();
-
-                try
-                {
-                    //This reads the all the text within the Stats.txt file
-                    string[] lines = File.ReadAllLines(path);
-
-                    foreach (string line in lines)
-                    {
-                        //I learned this from https://learn.microsoft.com/en-us/dotnet/api/system.string.split?view=net-7.0 which is about spliting the lists based off the part of the text file
-                        string[] parts = line.Split(','); 
-
-                        if (parts.Length == 5)
-                        {
-                            //Adds the monster and their stats, I learned about the parse from https://www.tutorialspoint.com/chash-int-tryparse-method
-                            string type = parts[0];
-                            if (int.TryParse(parts[1], out int hp) && int.TryParse(parts[2], out int mp) && int.TryParse(parts[3], out int ap) && int.TryParse(parts[4], out int def))
-                            {
-                                monsters.Add(new Monster(type, hp, mp, ap, def));
-                            }
-                        }
-                        else
-                        {
-                            //This is just in case it doesn't read the monster's stats
-                            Console.WriteLine($"Invalid line: {line}");
-                        }
-                        
-                    }
-                }
-                catch (Exception ex)
-                {
-                    //This reads out the message that the file could not have been found
-                    Console.WriteLine("The file could not be read:");
-                    Console.WriteLine($"Error reading file: {ex.Message}");
-                }
-
-                return monsters;
             }
         }
     }
