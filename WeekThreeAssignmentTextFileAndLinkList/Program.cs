@@ -106,6 +106,14 @@ namespace WeekThreeAssignmentTextFileAndLinkList
                 //This is the end text if the player killed all the monsters
                 Console.WriteLine("Congrats! You killed all the monster in the dungeon!");
             }
+
+            //This writes down the results of the game into the Results.txt file! I recieved help from this website to understand how to do it https://www.c-sharpcorner.com/article/csharp-streamwriter-example/
+            using (StreamWriter writer = new StreamWriter("Results.txt"))
+            {
+                writer.WriteLine("Game Results:");
+                writer.WriteLine("Player HP: " + playerHP);
+                writer.WriteLine("Monsters defeated: " + (monsters.Count - restofMonsters.Count));
+            }
         }
     }
 }
