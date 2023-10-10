@@ -1,0 +1,3 @@
+Game Results:
+Player HP: 100
+Monsters defeated: 0
